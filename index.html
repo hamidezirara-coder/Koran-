@@ -202,14 +202,14 @@ header{background:linear-gradient(180deg,#0f2040 0%,transparent 100%);padding:16
 <script>
 // ── Reciters ──
 const reciters = [
-  { id: 'Alafasy_128',    name: 'مشاري العفاسي',       style: 'مرتّل' },
-  { id: 'Husary_128',     name: 'محمود خليل الحصري',   style: 'مرتّل' },
-  { id: 'Minshawi_128',   name: 'محمد صديق المنشاوي',  style: 'مجوّد' },
-  { id: 'Abu_Bakr_Ash-Shaatree_128', name: 'أبو بكر الشاطري', style: 'مرتّل' },
-  { id: 'Maher_AlMuaiqly_128', name: 'ماهر المعيقلي',  style: 'مرتّل' },
-  { id: 'Muhammad_Jibreel_128', name: 'محمد جبريل',    style: 'مرتّل' },
-  { id: 'Sahl_Yasin_128', name: 'سهل ياسين',           style: 'مرتّل' },
-  { id: 'Yasser_Ad-Dussary_128', name: 'ياسر الدوسري', style: 'مرتّل' },
+  { id: 'f', server: 'https://server8.mp3quran.net/afs/',   name: 'مشاري العفاسي',      style: 'مرتّل' },
+  { id: 'h', server: 'https://server13.mp3quran.net/husr/', name: 'محمود خليل الحصري',  style: 'مرتّل' },
+  { id: 'm', server: 'https://server10.mp3quran.net/minsh/',name: 'محمد صديق المنشاوي', style: 'مجوّد' },
+  { id: 's', server: 'https://server11.mp3quran.net/sds/',  name: 'عبد الرحمن السديس',  style: 'مرتّل' },
+  { id: 'g', server: 'https://server7.mp3quran.net/shur/',  name: 'أبو بكر الشاطري',   style: 'مرتّل' },
+  { id: 'y', server: 'https://server12.mp3quran.net/yassen/',name: 'ياسين الجزائري',   style: 'مرتّل' },
+  { id: 'n', server: 'https://server6.mp3quran.net/qtm/',   name: 'ناصر القطامي',       style: 'مرتّل' },
+  { id: 'b', server: 'https://server14.mp3quran.net/basfr/',name: 'عبدالله بصفر',      style: 'مرتّل' },
 ];
 
 const surahNames=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
@@ -220,7 +220,7 @@ let surahs = [];
 let currentSurah = null;
 let currentAyahs = [];
 let bookmarks = JSON.parse(localStorage.getItem('quran_bookmarks') || '[]');
-let selectedReciterId = localStorage.getItem('quran_reciter') || 'Alafasy_128';
+let selectedReciterId = localStorage.getItem('quran_reciter') || 'f';
 let showTranslation = false;
 let fontSize = 1.4;
 
@@ -265,8 +265,10 @@ function setupAudio() {
 
 function getAudioUrl(ayahNum) {
   const r = getReciter();
-  const num = String(ayahNum).padStart(6, '0');
-  return `https://everyayah.com/data/${r.id}/${num}.mp3`;
+  // mp3quran.net uses surah number as folder, ayah as filename
+  const surahNum = String(currentSurah.number).padStart(3, '0');
+  const ayahNum3 = String(currentAyahs.find(a => a.number === ayahNum)?.numberInSurah || 1).padStart(3, '0');
+  return `${r.server}${surahNum}${ayahNum3}.mp3`;
 }
 
 function playAyah(index) {
