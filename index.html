@@ -429,12 +429,13 @@ function renderReader(ayahs, num) {
         <div class="reciter-name">${r.name}</div>
         <button class="ctrl-btn" onclick="goPage('reciters')" style="flex:0;white-space:nowrap;font-size:0.7rem">تغيير</button>
       </div>
-      <div class="audio-controls" style="justify-content:center;gap:14px">
+      <div class="audio-controls" style="justify-content:center;gap:14px;margin:8px 0">
         <button class="prev-btn" onclick="prevAyah()">⏮</button>
-        <button class="play-btn" onclick="playSurahFromStart()">▶</button>
+        <button class="play-btn" onclick="playSurahFromStart()" style="width:60px;height:60px;font-size:1.6rem">▶</button>
         <button class="prev-btn" onclick="nextAyah()">⏭</button>
       </div>
-      <div class="ayah-progress" id="ayah-progress">اضغط ▶ لبدء التلاوة</div>
+      <div style="text-align:center;font-size:0.75rem;color:#d4a843;margin-bottom:4px">اضغط ▶ لتشغيل السورة كاملة</div>
+      <div class="ayah-progress" id="ayah-progress"></div>
     </div>
 
     <div class="controls">
