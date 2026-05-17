@@ -11,135 +11,180 @@
 <title>القرآن الكريم</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;900&display=swap');
-:root{
-  --bg:#0a1628;--surface:#0f2040;--card:#152848;--gold:#d4a843;--gold2:#f0c96e;
-  --light:#e8dcc8;--muted:#7a9abb;--border:#1e3a5f;--radius:16px;--green:#2ecc71;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--light);min-height:100vh;overflow-x:hidden}
-body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(ellipse at 20% 20%,rgba(212,168,67,0.08) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(46,100,180,0.12) 0%,transparent 50%);pointer-events:none;z-index:0}
 
-header{background:linear-gradient(180deg,#0f2040 0%,transparent 100%);padding:16px 20px 12px;position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
-.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
-.app-title{font-family:'Amiri',serif;font-size:1.5rem;font-weight:700;color:var(--gold)}
+/* ── Themes ── */
+[data-theme="dark"] {
+  --bg:#0a1628;--surface:#0f2040;--card:#152848;--gold:#d4a843;--gold2:#f0c96e;
+  --text:#e8dcc8;--muted:#7a9abb;--border:#1e3a5f;--nav:#0f2040;
+}
+[data-theme="light"] {
+  --bg:#f5f0e8;--surface:#fff;--card:#fff;--gold:#b8860b;--gold2:#c8922a;
+  --text:#1a1208;--muted:#6b5f4f;--border:#e0d5c5;--nav:#fff;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;transition:background 0.3s,color 0.3s}
+
+header{background:var(--surface);padding:12px 16px;position:sticky;top:0;z-index:50;border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.app-title{font-family:'Amiri',serif;font-size:1.3rem;font-weight:700;color:var(--gold)}
+.header-actions{display:flex;gap:8px}
+.icon-btn{background:transparent;border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--text);cursor:pointer;font-size:1rem}
 .search-box{position:relative}
-.search-input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 16px 10px 40px;color:var(--light);font-family:'Cairo',sans-serif;font-size:0.88rem;outline:none;transition:border-color 0.2s}
+.search-input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 16px 9px 36px;color:var(--text);font-family:'Cairo',sans-serif;font-size:0.85rem;outline:none}
 .search-input:focus{border-color:var(--gold)}
 .search-input::placeholder{color:var(--muted)}
-.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:0.9rem}
 
-.page{display:none;padding:16px 16px 80px;position:relative;z-index:1}
+.page{display:none;padding:14px 14px 80px;position:relative;z-index:1}
 .page.active{display:block}
 
+/* ── Home ── */
+.hero{background:linear-gradient(135deg,#0f2040,#1a3560);border-radius:16px;padding:20px;margin-bottom:14px;text-align:center;border:1px solid #1e3a5f}
+[data-theme="light"] .hero{background:linear-gradient(135deg,#1a3560,#2a4a7f)}
+.hero-basmala{font-family:'Amiri',serif;font-size:1.6rem;color:var(--gold);margin-bottom:4px}
+.hero-sub{font-size:0.75rem;color:#b0a090}
+.stats-row{display:flex;gap:8px;margin-bottom:14px}
+.stat-box{flex:1;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center}
+.stat-n{font-size:1.2rem;font-weight:900;color:var(--gold)}
+.stat-l{font-size:0.65rem;color:var(--muted)}
+
+/* Prayer times */
+.prayer-card{background:linear-gradient(135deg,var(--surface),var(--card));border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:14px}
+.prayer-title{font-size:0.85rem;font-weight:700;color:var(--gold);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.prayer-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.prayer-item{text-align:center;padding:8px 4px;border-radius:10px;background:var(--bg);border:1px solid var(--border)}
+.prayer-item.next{background:var(--gold);border-color:var(--gold)}
+.prayer-item.next .prayer-name,.prayer-item.next .prayer-time{color:#0a1628}
+.prayer-name{font-size:0.62rem;color:var(--muted);margin-bottom:2px}
+.prayer-time{font-size:0.78rem;font-weight:700;color:var(--text)}
+
+/* Khatma */
+.khatma-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;margin-bottom:14px}
+.khatma-title{font-size:0.85rem;font-weight:700;color:var(--gold);margin-bottom:10px}
+.khatma-progress{height:10px;background:var(--bg);border-radius:99px;overflow:hidden;margin-bottom:8px}
+.khatma-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:99px;transition:width 0.5s}
+.khatma-info{display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);margin-bottom:10px}
+.khatma-btns{display:flex;gap:8px}
+.khatma-btn{flex:1;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-family:'Cairo',sans-serif;font-size:0.75rem;cursor:pointer}
+.khatma-btn.primary{background:var(--gold);border-color:var(--gold);color:#0a1628;font-weight:700}
+
 /* Surah List */
-.surah-list{display:flex;flex-direction:column;gap:8px}
-.surah-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all 0.2s;animation:fadeUp 0.3s ease both}
-.surah-card:active{transform:scale(0.98);background:#1a3560}
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.surah-num{width:40px;height:40px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:900;color:#0a1628;flex-shrink:0}
+.cats{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px;scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.cat-btn{flex-shrink:0;padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--surface);color:var(--muted);font-family:'Cairo',sans-serif;font-size:0.78rem;cursor:pointer;white-space:nowrap}
+.cat-btn.active{background:var(--gold);border-color:var(--gold);color:#0a1628;font-weight:700}
+.surah-list{display:flex;flex-direction:column;gap:6px}
+.surah-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.2s}
+.surah-card:active{transform:scale(0.98)}
+.surah-num{width:38px;height:38px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:900;color:#0a1628;flex-shrink:0}
 .surah-info{flex:1}
-.surah-name-ar{font-family:'Amiri',serif;font-size:1.1rem;color:var(--gold2);margin-bottom:2px}
-.surah-meta{font-size:0.72rem;color:var(--muted)}
-.surah-verses{font-size:0.7rem;color:var(--gold);font-weight:700;text-align:center;line-height:1.2}
+.surah-name-ar{font-family:'Amiri',serif;font-size:1rem;color:var(--gold2);margin-bottom:1px}
+.surah-meta{font-size:0.68rem;color:var(--muted)}
+.surah-verses{font-size:0.68rem;color:var(--gold);font-weight:700;text-align:center}
 
 /* Reader */
-.reader-header{background:var(--surface);border-radius:var(--radius);padding:18px;margin-bottom:12px;text-align:center;border:1px solid var(--border)}
-.reader-surah-name{font-family:'Amiri',serif;font-size:2rem;color:var(--gold);margin-bottom:4px}
-.reader-surah-info{font-size:0.8rem;color:var(--muted);margin-bottom:10px}
-.basmala{font-family:'Amiri Quran','Amiri',serif;font-size:1.5rem;color:var(--gold2);line-height:2}
+.back-btn{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 16px;color:var(--gold);font-family:'Cairo',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.reader-header{background:var(--surface);border-radius:14px;padding:16px;margin-bottom:10px;text-align:center;border:1px solid var(--border)}
+.reader-surah-name{font-family:'Amiri',serif;font-size:1.8rem;color:var(--gold);margin-bottom:3px}
+.reader-info{font-size:0.75rem;color:var(--muted);margin-bottom:8px}
+.basmala{font-family:'Amiri Quran','Amiri',serif;font-size:1.3rem;color:var(--gold2);line-height:2}
 
-/* Audio Player */
-.audio-bar{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:12px;display:flex;flex-direction:column;gap:10px}
-.audio-top{display:flex;align-items:center;gap:10px}
-.reciter-name{flex:1;font-size:0.85rem;color:var(--gold2);font-weight:700}
-.audio-controls{display:flex;align-items:center;gap:8px}
-.play-btn{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;color:#0a1628;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.prev-btn,.next-btn{width:34px;height:34px;border-radius:50%;background:var(--card);border:1px solid var(--border);color:var(--light);font-size:0.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.ayah-progress{font-size:0.75rem;color:var(--muted);text-align:center}
-.progress-bar{height:4px;background:var(--border);border-radius:99px;overflow:hidden;cursor:pointer}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:99px;width:0%;transition:width 0.3s}
+.audio-bar{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.audio-top{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.reciter-name{flex:1;font-size:0.82rem;color:var(--gold2);font-weight:700}
+.audio-controls{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:8px}
+.play-btn{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;color:#0a1628;font-size:1.4rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.ctrl-small{width:36px;height:36px;border-radius:50%;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.audio-status{text-align:center;font-size:0.72rem;color:var(--gold);min-height:18px}
 
-/* Controls */
 .controls{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-.ctrl-btn{flex:1;min-width:90px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 10px;color:var(--light);font-family:'Cairo',sans-serif;font-size:0.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;transition:all 0.2s}
+.ctrl-btn{flex:1;min-width:80px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 10px;color:var(--text);font-family:'Cairo',sans-serif;font-size:0.72rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px}
 .ctrl-btn.active{background:var(--gold);color:#0a1628;border-color:var(--gold);font-weight:700}
+.font-controls{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:7px 12px;margin-bottom:10px}
+.font-label{font-size:0.75rem;color:var(--muted);flex:1}
+.font-btn{width:28px;height:28px;border-radius:7px;border:1px solid var(--border);background:var(--surface);color:var(--gold);font-size:0.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700}
 
-.font-controls{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 14px;margin-bottom:12px}
-.font-label{font-size:0.78rem;color:var(--muted);flex:1}
-.font-btn{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--gold);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700}
-
-.ayah-container{display:flex;flex-direction:column;gap:6px}
-.ayah-block{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;transition:all 0.2s;cursor:pointer}
-.ayah-block.playing{border-color:var(--gold);background:#1a3560;box-shadow:0 0 16px rgba(212,168,67,0.2)}
-.ayah-text{font-family:'Amiri Quran','Amiri',serif;font-size:1.4rem;line-height:2.2;color:var(--light);text-align:right;margin-bottom:6px}
-.ayah-num{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;background:var(--gold);border-radius:50%;font-size:0.65rem;font-weight:900;color:#0a1628;margin-right:4px;vertical-align:middle}
-.ayah-footer{display:flex;align-items:center;gap:8px;margin-top:6px}
-.ayah-play-btn{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:5px 12px;color:var(--gold);font-size:0.72rem;cursor:pointer;display:flex;align-items:center;gap:4px}
+.ayah-block{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:6px;transition:all 0.2s;cursor:pointer}
+.ayah-block.playing{border-color:var(--gold);background:var(--surface);box-shadow:0 0 12px rgba(212,168,67,0.2)}
+.ayah-text{font-family:'Amiri Quran','Amiri',serif;font-size:1.4rem;line-height:2.2;color:var(--text);text-align:right;margin-bottom:6px}
+.ayah-num-badge{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;background:var(--gold);border-radius:50%;font-size:0.62rem;font-weight:900;color:#0a1628;margin-right:3px;vertical-align:middle}
+.ayah-footer{display:flex;align-items:center;gap:8px}
+.ayah-play-btn{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px 10px;color:var(--gold);font-size:0.68rem;cursor:pointer}
 .ayah-play-btn.playing{background:var(--gold);color:#0a1628;border-color:var(--gold)}
-.ayah-translation{font-size:0.82rem;color:var(--muted);line-height:1.6;border-top:1px solid var(--border);padding-top:8px;margin-top:6px;display:none}
+.ayah-translation{font-size:0.8rem;color:var(--muted);line-height:1.6;border-top:1px solid var(--border);padding-top:7px;margin-top:7px;display:none}
 .ayah-translation.show{display:block}
 
-.back-btn{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 18px;color:var(--gold);font-family:'Cairo',sans-serif;font-weight:700;font-size:0.88rem;cursor:pointer;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+/* Mushaf */
+.mushaf-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.mushaf-nav button{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:8px 16px;color:var(--gold);font-family:'Cairo',sans-serif;font-size:0.82rem;cursor:pointer}
+.mushaf-page-num{font-size:0.85rem;font-weight:700;color:var(--gold)}
+.mushaf-img{width:100%;border-radius:12px;border:1px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,0.3)}
+.mushaf-loading{text-align:center;padding:40px;color:var(--muted)}
 
-/* Reciters Page */
-.reciters-grid{display:flex;flex-direction:column;gap:8px}
-.reciter-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:all 0.2s}
-.reciter-card.selected{border-color:var(--gold);background:#1a3560}
-.reciter-card:active{transform:scale(0.98)}
-.reciter-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+/* Search */
+.search-page-input{width:100%;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;color:var(--text);font-family:'Cairo',sans-serif;font-size:0.95rem;outline:none;margin-bottom:14px}
+.search-page-input:focus{border-color:var(--gold)}
+.search-results{display:flex;flex-direction:column;gap:8px}
+.search-result-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;cursor:pointer}
+.result-surah{font-size:0.72rem;color:var(--gold);margin-bottom:4px;font-weight:700}
+.result-text{font-family:'Amiri',serif;font-size:1rem;color:var(--text);line-height:1.8}
+.result-highlight{background:rgba(212,168,67,0.3);border-radius:3px;padding:0 2px}
+
+/* Reciters */
+.reciter-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;margin-bottom:8px}
+.reciter-card.selected{border-color:var(--gold);background:var(--surface)}
+.reciter-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
 .reciter-info{flex:1}
-.reciter-name-ar{font-size:0.95rem;font-weight:700;color:var(--gold2);margin-bottom:2px}
-.reciter-style{font-size:0.72rem;color:var(--muted)}
-.reciter-check{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.8rem}
+.reciter-name-ar{font-size:0.9rem;font-weight:700;color:var(--gold2);margin-bottom:1px}
+.reciter-style{font-size:0.68rem;color:var(--muted)}
+.reciter-check{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.75rem}
 .reciter-card.selected .reciter-check{background:var(--gold);border-color:var(--gold);color:#0a1628}
 
-/* Loading */
-.loading{text-align:center;padding:50px 0;color:var(--muted)}
-.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* Hero */
-.hero-banner{background:linear-gradient(135deg,#0f2040,#1a3560);border:1px solid var(--border);border-radius:var(--radius);padding:22px 18px;margin-bottom:14px;text-align:center}
-.hero-title{font-family:'Amiri',serif;font-size:1.4rem;color:var(--gold);margin-bottom:4px}
-.hero-sub{font-size:0.78rem;color:var(--muted)}
-.stats-row{display:flex;gap:8px;margin-bottom:14px}
-.stat-box{flex:1;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center}
-.stat-n{font-size:1.3rem;font-weight:900;color:var(--gold)}
-.stat-l{font-size:0.68rem;color:var(--muted)}
-
 /* Bookmarks */
-.bookmark-list{display:flex;flex-direction:column;gap:8px}
-.bookmark-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer}
-.bm-icon{font-size:1.5rem}
+.bookmark-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;margin-bottom:8px}
+.bm-icon{font-size:1.4rem}
 .bm-info{flex:1}
-.bm-name{font-size:0.9rem;font-weight:700;color:var(--gold2)}
-.bm-sub{font-size:0.72rem;color:var(--muted)}
-.bm-del{background:transparent;border:none;color:#e74c3c;font-size:1rem;cursor:pointer}
-.empty-state{text-align:center;padding:50px 0;color:var(--muted)}
-.empty-state span{font-size:3rem;display:block;margin-bottom:10px}
+.bm-name{font-size:0.88rem;font-weight:700;color:var(--gold2)}
+.bm-sub{font-size:0.68rem;color:var(--muted)}
+.bm-del{background:transparent;border:none;color:#e74c3c;cursor:pointer;font-size:0.9rem;padding:4px}
 
 /* Bottom Nav */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);display:flex;border-top:1px solid var(--border);z-index:100;backdrop-filter:blur(12px)}
-.nav-item{flex:1;padding:10px 0;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:'Cairo',sans-serif;font-size:0.62rem;transition:color 0.2s}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--nav);display:flex;border-top:1px solid var(--border);z-index:100}
+.nav-item{flex:1;padding:8px 0;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:'Cairo',sans-serif;font-size:0.58rem}
 .nav-item.active{color:var(--gold)}
-.nav-icon{font-size:1.25rem}
+.nav-icon{font-size:1.2rem}
 
-/* Mini player */
-.mini-player{position:fixed;bottom:56px;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:8px 16px;display:none;align-items:center;gap:10px;z-index:90}
+/* Mini Player */
+.mini-player{position:fixed;bottom:56px;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:8px 14px;display:none;align-items:center;gap:10px;z-index:90}
 .mini-player.show{display:flex}
 .mini-info{flex:1}
-.mini-surah{font-size:0.78rem;font-weight:700;color:var(--gold2)}
-.mini-ayah{font-size:0.68rem;color:var(--muted)}
-.mini-play{width:34px;height:34px;border-radius:50%;background:var(--gold);border:none;color:#0a1628;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.mini-stop{width:28px;height:28px;border-radius:50%;background:var(--card);border:1px solid var(--border);color:var(--light);font-size:0.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.mini-surah{font-size:0.75rem;font-weight:700;color:var(--gold2)}
+.mini-ayah{font-size:0.65rem;color:var(--muted)}
+.mini-play{width:32px;height:32px;border-radius:50%;background:var(--gold);border:none;color:#0a1628;font-size:0.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.mini-stop{width:26px;height:26px;border-radius:50%;background:var(--card);border:1px solid var(--border);color:var(--text);font-size:0.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+/* Section titles */
+.section-title{font-size:1rem;font-weight:800;margin-bottom:12px;color:var(--gold2);display:flex;align-items:center;gap:6px}
+
+/* Loading */
+.loading{text-align:center;padding:40px 0;color:var(--muted)}
+.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 10px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.empty-state{text-align:center;padding:40px 0;color:var(--muted)}
+.empty-state span{font-size:2.5rem;display:block;margin-bottom:8px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 </style>
 </head>
-<body>
+<body data-theme="dark">
 
 <header>
   <div class="header-top">
-    <div class="app-title">القرآن الكريم</div>
-    <span style="font-size:1.5rem">🌙</span>
+    <div class="app-title">🌙 القرآن الكريم</div>
+    <div class="header-actions">
+      <button class="icon-btn" onclick="toggleTheme()" id="theme-btn">☀️</button>
+      <button class="icon-btn" onclick="goPage('search-page')">🔍</button>
+    </div>
   </div>
   <div class="search-box" id="search-wrap">
     <span class="search-icon">🔍</span>
@@ -149,7 +194,7 @@ header{background:linear-gradient(180deg,#0f2040 0%,transparent 100%);padding:16
 
 <!-- Mini Player -->
 <div class="mini-player" id="mini-player">
-  <div style="font-size:1.4rem">🎵</div>
+  <div style="font-size:1.3rem">🎵</div>
   <div class="mini-info">
     <div class="mini-surah" id="mini-surah-name">-</div>
     <div class="mini-ayah" id="mini-ayah-info">-</div>
@@ -160,18 +205,43 @@ header{background:linear-gradient(180deg,#0f2040 0%,transparent 100%);padding:16
 
 <!-- HOME -->
 <div class="page active" id="page-home">
-  <div class="hero-banner">
-    <div class="hero-title">﷽</div>
-    <div class="hero-sub">القرآن الكريم كاملاً — ١١٤ سورة</div>
+  <div class="hero">
+    <div class="hero-basmala">﷽</div>
+    <div class="hero-sub">القرآن الكريم — ١١٤ سورة — ٦٢٣٦ آية</div>
   </div>
+
+  <!-- Prayer Times -->
+  <div class="prayer-card">
+    <div class="prayer-title">🕌 مواقيت الصلاة — <span id="prayer-city">جاري التحديد...</span></div>
+    <div class="prayer-grid" id="prayer-grid">
+      <div class="loading" style="grid-column:1/-1;padding:10px"><div class="spinner" style="width:20px;height:20px;margin:0 auto"></div></div>
+    </div>
+  </div>
+
+  <!-- Khatma -->
+  <div class="khatma-card">
+    <div class="khatma-title">📊 تتبع الختمة</div>
+    <div class="khatma-progress"><div class="khatma-fill" id="khatma-fill" style="width:0%"></div></div>
+    <div class="khatma-info">
+      <span id="khatma-pages">٠ / ٦٠٤ صفحة</span>
+      <span id="khatma-pct">٠٪</span>
+    </div>
+    <div class="khatma-btns">
+      <button class="khatma-btn" onclick="khatmaBack()">− صفحة</button>
+      <button class="khatma-btn primary" onclick="khatmaAdd()">+ أضف صفحة</button>
+      <button class="khatma-btn" onclick="resetKhatma()">↺ إعادة</button>
+    </div>
+  </div>
+
   <div class="stats-row">
     <div class="stat-box"><div class="stat-n">١١٤</div><div class="stat-l">سورة</div></div>
     <div class="stat-box"><div class="stat-n">٦٢٣٦</div><div class="stat-l">آية</div></div>
-    <div class="stat-box"><div class="stat-n" id="home-reciter-stat">-</div><div class="stat-l">القارئ</div></div>
+    <div class="stat-box"><div class="stat-n" id="home-reciter">مشاري</div><div class="stat-l">القارئ</div></div>
   </div>
-  <div class="surah-list" id="surah-list">
-    <div class="loading"><div class="spinner"></div>جاري التحميل...</div>
-  </div>
+
+  <div class="cats" id="cats-home"></div>
+  <div class="section-title">📖 السور</div>
+  <div class="surah-list" id="surah-list"></div>
 </div>
 
 <!-- READER -->
@@ -180,27 +250,54 @@ header{background:linear-gradient(180deg,#0f2040 0%,transparent 100%);padding:16
   <div id="reader-content"></div>
 </div>
 
+<!-- MUSHAF -->
+<div class="page" id="page-mushaf">
+  <div class="section-title">📖 المصحف الشريف</div>
+  <div class="mushaf-nav">
+    <button onclick="mushafPrev()">← السابق</button>
+    <span class="mushaf-page-num">صفحة <span id="mushaf-page-num">1</span></span>
+    <button onclick="mushafNext()">التالي →</button>
+  </div>
+  <div id="mushaf-content">
+    <div class="mushaf-loading"><div class="spinner"></div>جاري تحميل الصفحة...</div>
+  </div>
+  <div style="display:flex;gap:8px;margin-top:10px">
+    <input type="number" id="mushaf-goto" placeholder="انتقل لصفحة..." min="1" max="604" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 12px;color:var(--text);font-family:'Cairo',sans-serif;font-size:0.85rem;outline:none"/>
+    <button onclick="mushafGoto()" style="background:var(--gold);border:none;border-radius:10px;padding:9px 16px;color:#0a1628;font-family:'Cairo',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer">انتقل</button>
+  </div>
+</div>
+
+<!-- SEARCH PAGE -->
+<div class="page" id="page-search-page">
+  <div class="section-title">🔍 البحث في القرآن</div>
+  <input class="search-page-input" id="quran-search-input" type="text" placeholder="ابحث بكلمة أو آية..." oninput="searchQuran()"/>
+  <div id="search-results-container">
+    <div class="empty-state"><span>🔍</span>اكتب كلمة للبحث</div>
+  </div>
+</div>
+
 <!-- RECITERS -->
 <div class="page" id="page-reciters">
-  <div style="font-size:1.1rem;font-weight:800;margin-bottom:14px;color:var(--gold2)">🎙 اختر القارئ</div>
-  <div class="reciters-grid" id="reciters-grid"></div>
+  <div class="section-title">🎙 اختر القارئ</div>
+  <div id="reciters-grid"></div>
 </div>
 
 <!-- BOOKMARKS -->
 <div class="page" id="page-bookmarks">
-  <div style="font-size:1.1rem;font-weight:800;margin-bottom:14px;color:var(--gold2)">🔖 المفضلة</div>
-  <div class="bookmark-list" id="bookmark-list"></div>
+  <div class="section-title">🔖 المفضلة</div>
+  <div id="bookmark-list"></div>
 </div>
 
 <!-- BOTTOM NAV -->
 <div class="bottom-nav">
-  <button class="nav-item active" onclick="goPage('home')" id="nav-home"><span class="nav-icon">📖</span>السور</button>
+  <button class="nav-item active" onclick="goPage('home')" id="nav-home"><span class="nav-icon">🏠</span>الرئيسية</button>
+  <button class="nav-item" onclick="goPage('mushaf')" id="nav-mushaf"><span class="nav-icon">📖</span>المصحف</button>
   <button class="nav-item" onclick="goPage('reciters')" id="nav-reciters"><span class="nav-icon">🎙</span>القراء</button>
   <button class="nav-item" onclick="goPage('bookmarks')" id="nav-bookmarks"><span class="nav-icon">🔖</span>المفضلة</button>
 </div>
 
 <script>
-// ── Reciters ──
+// ── Data ──
 const reciters = [
   { id: 'ar.alafasy',        name: 'مشاري العفاسي',      style: 'مرتّل' },
   { id: 'ar.husary',         name: 'محمود خليل الحصري',  style: 'مرتّل' },
@@ -215,182 +312,186 @@ const surahNames=['الفاتحة','البقرة','آل عمران','النسا�
 const surahVerses=[7,286,200,176,120,165,206,75,129,109,123,111,43,52,99,128,111,110,98,135,112,78,118,64,77,227,93,88,69,60,34,30,73,54,45,83,182,88,75,85,54,53,89,59,37,35,38,29,18,45,60,49,62,55,78,96,29,22,24,13,14,11,11,18,12,12,30,52,52,44,28,28,20,56,40,31,54,75,44,33,29,30,36,33,27,26,30,20,19,18,12,11,12,12,8,11,98,8,15,16,6,6,5,8,4,6,5,3,6,11,4,3,4,5,5,4,5,6];
 const surahType=['مكية','مدنية','مدنية','مدنية','مدنية','مكية','مكية','مدنية','مدنية','مكية','مكية','مكية','مدنية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مدنية','مكية','مدنية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مدنية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مدنية','مدنية','مدنية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مدنية','مدنية','مدنية','مدنية','مدنية','مدنية','مدنية','مدنية','مدنية','مدنية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مدنية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مدنية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية','مكية'];
 
-let surahs = [];
-let currentSurah = null;
-let currentAyahs = [];
-let bookmarks = JSON.parse(localStorage.getItem('quran_bookmarks') || '[]');
-let selectedReciterId = localStorage.getItem('quran_reciter') || 'ar.alafasy';
-let showTranslation = false;
-let fontSize = 1.4;
+// ── State ──
+let surahs = [], currentSurah = null, currentAyahs = [];
+let bookmarks = JSON.parse(localStorage.getItem('q_bookmarks') || '[]');
+let selectedReciterId = localStorage.getItem('q_reciter') || 'ar.alafasy';
+let showTranslation = false, fontSize = 1.4;
+let currentCat = 'الكل';
+let mushafPage = parseInt(localStorage.getItem('q_mushaf_page') || '1');
+let khatmaPages = parseInt(localStorage.getItem('q_khatma') || '0');
+let isDark = localStorage.getItem('q_theme') !== 'light';
+let quranData = null;
 
 // Audio
 let audio = new Audio();
-let currentAyahIndex = 0;
 let isPlaying = false;
-let autoPlay = true;
 
-function getReciter() { return reciters.find(r => r.id === selectedReciterId); }
+function getReciter() { return reciters.find(r => r.id === selectedReciterId) || reciters[0]; }
+
+// ── Theme ──
+function toggleTheme() {
+  isDark = !isDark;
+  document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  document.getElementById('theme-btn').textContent = isDark ? '☀️' : '🌙';
+  document.getElementById('app-title-icon') && (document.getElementById('app-title-icon').textContent = isDark ? '🌙' : '☀️');
+  localStorage.setItem('q_theme', isDark ? 'dark' : 'light');
+}
 
 // ── Init ──
 function init() {
+  document.body.setAttribute('data-theme', isDark ? 'dark' : 'light');
+  document.getElementById('theme-btn').textContent = isDark ? '☀️' : '🌙';
   surahs = surahNames.map((name, i) => ({ number: i+1, name, verses: surahVerses[i], type: surahType[i] }));
   renderSurahs(surahs);
-  updateHomeReciter();
   renderReciters();
-  setupAudio();
+  updateHomeReciter();
+  loadPrayerTimes();
+  updateKhatma();
+  renderMushaf();
+  loadQuranData();
 }
 
-function updateHomeReciter() {
-  const r = getReciter();
-  document.getElementById('home-reciter-stat').textContent = r ? r.name.split(' ')[0] : '-';
+// ── Khatma ──
+function updateKhatma() {
+  const pct = Math.round(khatmaPages / 604 * 100);
+  document.getElementById('khatma-fill').style.width = pct + '%';
+  document.getElementById('khatma-pages').textContent = `${khatmaPages} / ٦٠٤ صفحة`;
+  document.getElementById('khatma-pct').textContent = pct + '٪';
 }
 
-// ── Audio ──
-function setupAudio() {
-  audio.onended = () => {
-    if (autoPlay && currentAyahIndex < currentAyahs.length - 1) {
-      playAyah(currentAyahIndex + 1);
-    } else {
-      isPlaying = false;
-      updatePlayUI();
-    }
-  };
-  audio.onerror = () => {
-    if (autoPlay && currentAyahIndex < currentAyahs.length - 1) {
-      setTimeout(() => playAyah(currentAyahIndex + 1), 500);
-    }
-  };
+function khatmaAdd() {
+  if (khatmaPages < 604) {
+    khatmaPages++;
+    localStorage.setItem('q_khatma', khatmaPages);
+    updateKhatma();
+    if (khatmaPages === 604) alert('🎉 بارك الله فيك! أتممت ختمة القرآن الكريم كاملة');
+  }
 }
 
-function getAudioUrl(globalAyahNum) {
-  const r = getReciter();
-  return `https://cdn.islamic.network/quran/audio/128/${r.id}/${globalAyahNum}.mp3`;
+function khatmaBack() {
+  if (khatmaPages > 0) { khatmaPages--; localStorage.setItem('q_khatma', khatmaPages); updateKhatma(); }
 }
 
-function getSurahAudioUrl() {
-  const r = getReciter();
-  const num = String(currentSurah.number).padStart(3, '0');
-  const servers = {
-    'ar.alafasy':        `https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/${num}.mp3`,
-    'ar.husary':         `https://download.quranicaudio.com/quran/mahmood_khaleel_al-husaree/${num}.mp3`,
-    'ar.minshawi':       `https://download.quranicaudio.com/quran/mohamed_siddiq_al-minshawi/${num}.mp3`,
-    'ar.abdurrahmaanas': `https://download.quranicaudio.com/quran/abdurrahmaan_as-sudais/${num}.mp3`,
-    'ar.shaatree':       `https://download.quranicaudio.com/quran/abu_bakr_ash-shaatree/${num}.mp3`,
-    'ar.mahermuaiqly':   `https://download.quranicaudio.com/quran/maher_al_muaiqly/${num}.mp3`,
-    'ar.abdullahbasfar': `https://download.quranicaudio.com/quran/abdullah_basfar/${num}.mp3`,
-    'ar.aymanswoaid':    `https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/${num}.mp3`,
-  };
-  return servers[r.id] || servers['ar.alafasy'];
+function resetKhatma() {
+  if (confirm('إعادة تعيين الختمة؟')) { khatmaPages = 0; localStorage.setItem('q_khatma', 0); updateKhatma(); }
 }
 
-function playSurahFromStart() {
-  if (!currentSurah) return;
-  const url = getSurahAudioUrl();
-  // Show loading
-  const prog = document.getElementById('ayah-progress');
-  if (prog) prog.textContent = '⏳ جاري التحميل...';
-  
-  audio.pause();
-  audio.src = '';
-  
-  setTimeout(() => {
-    audio.src = url;
-    audio.load();
-    
-    audio.oncanplay = () => {
-      audio.play().then(() => {
-        isPlaying = true;
-        updatePlayUI();
-        document.getElementById('mini-surah-name').textContent = currentSurah.name;
-        document.getElementById('mini-ayah-info').textContent = `${getReciter().name} — السورة كاملة`;
-        document.getElementById('mini-player').classList.add('show');
-        if (prog) prog.textContent = `▶ ${currentSurah.name} — ${getReciter().name}`;
-      }).catch(err => {
-        if (prog) prog.textContent = '❌ تعذّر التشغيل - جرّب آية بآية';
-      });
-    };
-    
-    audio.onerror = () => {
-      if (prog) prog.textContent = '❌ الرابط لا يعمل - جرّب قارئاً آخر';
-    };
-    
-    audio.onended = () => {
-      isPlaying = false;
-      updatePlayUI();
-      if (prog) prog.textContent = 'انتهت السورة ✓';
-    };
-  }, 100);
+// ── Prayer Times ──
+async function loadPrayerTimes() {
+  try {
+    const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, {timeout:5000}));
+    const {latitude: lat, longitude: lng} = pos.coords;
+    const res = await fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=4`);
+    const data = await res.json();
+    const t = data.data.timings;
+    const city = data.data.meta.timezone.split('/')[1]?.replace('_',' ') || 'موقعك';
+    document.getElementById('prayer-city').textContent = city;
+    const prayers = [
+      {name:'الفجر', time:t.Fajr},
+      {name:'الظهر', time:t.Dhuhr},
+      {name:'العصر', time:t.Asr},
+      {name:'المغرب', time:t.Maghrib},
+      {name:'العشاء', time:t.Isha},
+    ];
+    const now = new Date();
+    const nowMins = now.getHours()*60 + now.getMinutes();
+    let nextIdx = prayers.findIndex(p => {
+      const [h,m] = p.time.split(':').map(Number);
+      return h*60+m > nowMins;
+    });
+    if (nextIdx === -1) nextIdx = 0;
+    document.getElementById('prayer-grid').innerHTML = prayers.map((p,i) => `
+      <div class="prayer-item ${i===nextIdx?'next':''}">
+        <div class="prayer-name">${p.name}</div>
+        <div class="prayer-time">${p.time}</div>
+      </div>`).join('');
+  } catch(e) {
+    document.getElementById('prayer-grid').innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--muted);font-size:0.75rem;padding:8px">تعذّر تحديد الموقع</div>';
+    document.getElementById('prayer-city').textContent = '';
+  }
 }
 
-function playAyah(index) {
-  currentAyahIndex = index;
-  const ayah = currentAyahs[index];
-  if (!ayah) return;
+// ── Mushaf ──
+function renderMushaf() {
+  document.getElementById('mushaf-page-num').textContent = mushafPage;
+  const num = String(mushafPage).padStart(3, '0');
+  document.getElementById('mushaf-content').innerHTML = `
+    <img class="mushaf-img" src="https://www.searchtruth.com/quran/images2/${num}.jpg"
+      onerror="this.src='https://quran.com/images/pages/${num}.png'"
+      onload="this.style.opacity=1" style="opacity:0;transition:opacity 0.3s"
+      alt="صفحة ${mushafPage}"/>`;
+}
 
-  // Remove playing class from all
-  document.querySelectorAll('.ayah-block').forEach(el => el.classList.remove('playing'));
-  document.querySelectorAll('.ayah-play-btn').forEach(el => {
-    el.classList.remove('playing');
-    el.textContent = '▶ استمع';
+function mushafNext() {
+  if (mushafPage < 604) { mushafPage++; localStorage.setItem('q_mushaf_page', mushafPage); renderMushaf(); }
+}
+
+function mushafPrev() {
+  if (mushafPage > 1) { mushafPage--; localStorage.setItem('q_mushaf_page', mushafPage); renderMushaf(); }
+}
+
+function mushafGoto() {
+  const v = parseInt(document.getElementById('mushaf-goto').value);
+  if (v >= 1 && v <= 604) { mushafPage = v; localStorage.setItem('q_mushaf_page', mushafPage); renderMushaf(); }
+}
+
+// ── Quran Search Data ──
+async function loadQuranData() {
+  try {
+    const res = await fetch('https://api.alquran.cloud/v1/quran/quran-simple');
+    const data = await res.json();
+    quranData = data.data.surahs;
+  } catch(e) {}
+}
+
+function searchQuran() {
+  const q = document.getElementById('quran-search-input').value.trim();
+  const container = document.getElementById('search-results-container');
+  if (!q || q.length < 2) { container.innerHTML = '<div class="empty-state"><span>🔍</span>اكتب كلمة للبحث</div>'; return; }
+  if (!quranData) { container.innerHTML = '<div class="empty-state"><span>⏳</span>جاري تحميل البيانات...</div>'; return; }
+
+  const results = [];
+  quranData.forEach(s => {
+    s.ayahs.forEach(a => {
+      if (a.text.includes(q)) results.push({ surahNum: s.number, surahName: s.englishName, surahNameAr: surahNames[s.number-1], ayahNum: a.numberInSurah, text: a.text });
+    });
+    if (results.length >= 30) return;
   });
 
-  // Add playing class
-  const block = document.getElementById(`ayah-${ayah.numberInSurah}`);
-  const btn = document.getElementById(`play-btn-${ayah.numberInSurah}`);
-  if (block) { block.classList.add('playing'); block.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-  if (btn) { btn.classList.add('playing'); btn.textContent = '⏸ إيقاف'; }
+  if (!results.length) { container.innerHTML = '<div class="empty-state"><span>🔍</span>لا توجد نتائج</div>'; return; }
 
-  audio.src = getAudioUrl(ayah.number);
-  audio.play().catch(() => {});
-  isPlaying = true;
-
-  // Update mini player
-  document.getElementById('mini-surah-name').textContent = currentSurah ? currentSurah.name : '';
-  document.getElementById('mini-ayah-info').textContent = `الآية ${ayah.numberInSurah} - ${getReciter().name}`;
-  document.getElementById('mini-player').classList.add('show');
-
-  updatePlayUI();
-  updateAyahProgress();
+  container.innerHTML = `<div style="font-size:0.75rem;color:var(--muted);margin-bottom:10px">${results.length} نتيجة</div>` +
+    results.map(r => `
+      <div class="search-result-item" onclick="openSurahAtAyah(${r.surahNum}, ${r.ayahNum})">
+        <div class="result-surah">${r.surahNameAr} — الآية ${r.ayahNum}</div>
+        <div class="result-text">${r.text.replace(q, `<span class="result-highlight">${q}</span>`)}</div>
+      </div>`).join('');
 }
 
-function togglePlay() {
-  if (isPlaying) {
-    audio.pause();
-    isPlaying = false;
-  } else {
-    audio.play().catch(() => {});
-    isPlaying = true;
-  }
-  updatePlayUI();
+async function openSurahAtAyah(surahNum, ayahNum) {
+  await openSurah(surahNum);
+  setTimeout(() => {
+    const el = document.getElementById(`ayah-${ayahNum}`);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 500);
 }
-
-function stopAudio() {
-  audio.pause();
-  audio.src = '';
-  isPlaying = false;
-  document.querySelectorAll('.ayah-block').forEach(el => el.classList.remove('playing'));
-  document.querySelectorAll('.ayah-play-btn').forEach(el => { el.classList.remove('playing'); el.textContent = '▶ استمع'; });
-  document.getElementById('mini-player').classList.remove('show');
-  updatePlayUI();
-}
-
-function updatePlayUI() {
-  document.getElementById('mini-play-btn').textContent = isPlaying ? '⏸' : '▶';
-}
-
-function updateAyahProgress() {
-  const el = document.getElementById('ayah-progress');
-  if (el) el.textContent = `الآية ${currentAyahIndex + 1} من ${currentAyahs.length}`;
-}
-
-
 
 // ── Surahs ──
+function renderCats() {
+  const cats = ['الكل', 'مكية', 'مدنية'];
+  document.getElementById('cats-home').innerHTML = cats.map(c => `
+    <button class="cat-btn ${c===currentCat?'active':''}" onclick="setCat('${c}')">${c}</button>`).join('');
+}
+
+function setCat(c) { currentCat = c; renderCats(); filterSurahs(); }
+
 function renderSurahs(list) {
+  renderCats();
   const el = document.getElementById('surah-list');
   if (!list.length) { el.innerHTML = '<div class="empty-state"><span>🔍</span>لا توجد نتائج</div>'; return; }
   el.innerHTML = list.map((s, idx) => `
-    <div class="surah-card" style="animation-delay:${idx*0.02}s" onclick="openSurah(${s.number})">
+    <div class="surah-card" style="animation:fadeUp 0.3s ease ${idx*0.01}s both" onclick="openSurah(${s.number})">
       <div class="surah-num">${s.number}</div>
       <div class="surah-info">
         <div class="surah-name-ar">${s.name}</div>
@@ -402,24 +503,26 @@ function renderSurahs(list) {
 
 function filterSurahs() {
   const q = document.getElementById('search').value.trim();
-  renderSurahs(q ? surahs.filter(s => s.name.includes(q) || String(s.number).includes(q)) : surahs);
+  let list = surahs;
+  if (currentCat !== 'الكل') list = list.filter(s => s.type === currentCat);
+  if (q) list = list.filter(s => s.name.includes(q) || String(s.number).includes(q));
+  renderSurahs(list);
 }
 
-// ── Open Surah ──
+// ── Reader ──
 async function openSurah(num) {
   currentSurah = surahs[num - 1];
   stopAudio();
   goPage('reader');
   document.getElementById('search-wrap').style.display = 'none';
-  document.getElementById('reader-content').innerHTML = '<div class="loading"><div class="spinner"></div>جاري تحميل السورة...</div>';
-
+  document.getElementById('reader-content').innerHTML = '<div class="loading"><div class="spinner"></div>جاري التحميل...</div>';
   try {
     const res = await fetch(`https://api.alquran.cloud/v1/surah/${num}`);
     const data = await res.json();
     currentAyahs = data.data.ayahs;
     renderReader(currentAyahs, num);
   } catch(e) {
-    document.getElementById('reader-content').innerHTML = '<div class="empty-state"><span>⚠️</span>تعذّر التحميل، تحقق من الاتصال</div>';
+    document.getElementById('reader-content').innerHTML = '<div class="empty-state"><span>⚠️</span>تعذّر التحميل</div>';
   }
 }
 
@@ -427,47 +530,39 @@ function renderReader(ayahs, num) {
   const s = currentSurah;
   const isBookmarked = bookmarks.find(b => b.surah === num);
   const r = getReciter();
-
   document.getElementById('reader-content').innerHTML = `
     <div class="reader-header">
       <div class="reader-surah-name">${s.name}</div>
-      <div class="reader-surah-info">${s.type} • ${s.verses} آية</div>
+      <div class="reader-info">${s.type} • ${s.verses} آية • سورة رقم ${num}</div>
       ${num !== 1 && num !== 9 ? `<div class="basmala">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>` : ''}
     </div>
-
     <div class="audio-bar">
       <div class="audio-top">
-        <span style="font-size:1.3rem">🎙</span>
+        <span>🎙</span>
         <div class="reciter-name">${r.name}</div>
-        <button class="ctrl-btn" onclick="goPage('reciters')" style="flex:0;white-space:nowrap;font-size:0.7rem">تغيير</button>
+        <button class="ctrl-btn" onclick="goPage('reciters')" style="flex:0;font-size:0.68rem;white-space:nowrap">تغيير</button>
       </div>
-      <div class="audio-controls" style="justify-content:center;gap:14px;margin:8px 0">
-        <button class="prev-btn" onclick="prevAyah()">⏮</button>
-        <button class="play-btn" onclick="playSurahFromStart()" style="width:60px;height:60px;font-size:1.6rem">▶</button>
-        <button class="prev-btn" onclick="nextAyah()">⏭</button>
+      <div class="audio-controls">
+        <button class="ctrl-small" onclick="prevAyah()">⏮</button>
+        <button class="play-btn" id="main-play-btn" onclick="playSurahFromStart()">▶</button>
+        <button class="ctrl-small" onclick="nextAyah()">⏭</button>
       </div>
-      <div style="text-align:center;font-size:0.75rem;color:#d4a843;margin-bottom:4px">اضغط ▶ لتشغيل السورة كاملة</div>
-      <div class="ayah-progress" id="ayah-progress"></div>
+      <div class="audio-status" id="audio-status">اضغط ▶ لتشغيل السورة كاملة</div>
     </div>
-
     <div class="controls">
-      <button class="ctrl-btn ${isBookmarked ? 'active' : ''}" onclick="toggleBookmark(${num})" id="bm-btn">
-        🔖 ${isBookmarked ? 'في المفضلة' : 'أضف للمفضلة'}
-      </button>
+      <button class="ctrl-btn ${isBookmarked?'active':''}" onclick="toggleBookmark(${num})" id="bm-btn">🔖 ${isBookmarked?'في المفضلة':'أضف'}</button>
       <button class="ctrl-btn" onclick="toggleTranslation()" id="trans-btn">🌐 تفسير</button>
     </div>
-
     <div class="font-controls">
       <span class="font-label">حجم الخط</span>
       <button class="font-btn" onclick="changeFontSize(-0.1)">−</button>
       <button class="font-btn" onclick="changeFontSize(0.1)">+</button>
     </div>
-
-    <div class="ayah-container">
+    <div id="ayah-container">
       ${ayahs.map(a => `
         <div class="ayah-block" id="ayah-${a.numberInSurah}">
           <div class="ayah-text" style="font-size:${fontSize}rem">
-            ${a.text} <span class="ayah-num">${a.numberInSurah}</span>
+            ${a.text} <span class="ayah-num-badge">${a.numberInSurah}</span>
           </div>
           <div class="ayah-footer">
             <button class="ayah-play-btn" id="play-btn-${a.numberInSurah}" onclick="playAyahByNum(${a.numberInSurah})">▶ استمع</button>
@@ -477,13 +572,88 @@ function renderReader(ayahs, num) {
     </div>`;
 }
 
-function playAyahByNum(num) {
-  const idx = currentAyahs.findIndex(a => a.numberInSurah === num);
-  if (idx >= 0) playAyah(idx);
+// ── Audio ──
+function getSurahAudioUrl() {
+  const r = getReciter();
+  const num = String(currentSurah.number).padStart(3, '0');
+  const urls = {
+    'ar.alafasy':        `https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/${num}.mp3`,
+    'ar.husary':         `https://download.quranicaudio.com/quran/mahmood_khaleel_al-husaree/${num}.mp3`,
+    'ar.minshawi':       `https://download.quranicaudio.com/quran/mohamed_siddiq_al-minshawi/${num}.mp3`,
+    'ar.abdurrahmaanas': `https://download.quranicaudio.com/quran/abdurrahmaan_as-sudais/${num}.mp3`,
+    'ar.shaatree':       `https://download.quranicaudio.com/quran/abu_bakr_ash-shaatree/${num}.mp3`,
+    'ar.mahermuaiqly':   `https://download.quranicaudio.com/quran/maher_al_muaiqly/${num}.mp3`,
+    'ar.abdullahbasfar': `https://download.quranicaudio.com/quran/abdullah_basfar/${num}.mp3`,
+  };
+  return urls[r.id] || urls['ar.alafasy'];
 }
 
-function prevAyah() { if (currentAyahIndex > 0) playAyah(currentAyahIndex - 1); }
-function nextAyah() { if (currentAyahIndex < currentAyahs.length - 1) playAyah(currentAyahIndex + 1); }
+function playSurahFromStart() {
+  if (!currentSurah) return;
+  const status = document.getElementById('audio-status');
+  if (status) status.textContent = '⏳ جاري التحميل...';
+  audio.pause(); audio.src = '';
+  setTimeout(() => {
+    audio.src = getSurahAudioUrl();
+    audio.load();
+    audio.oncanplay = () => {
+      audio.play().then(() => {
+        isPlaying = true; updatePlayUI();
+        document.getElementById('mini-surah-name').textContent = currentSurah.name;
+        document.getElementById('mini-ayah-info').textContent = getReciter().name + ' — كاملة';
+        document.getElementById('mini-player').classList.add('show');
+        if (status) status.textContent = `▶ ${currentSurah.name} — ${getReciter().name}`;
+      }).catch(() => { if (status) status.textContent = '❌ تعذّر التشغيل'; });
+    };
+    audio.onerror = () => { if (status) status.textContent = '❌ الرابط غير متاح، جرّب قارئاً آخر'; };
+    audio.onended = () => { isPlaying = false; updatePlayUI(); if (status) status.textContent = 'انتهت السورة ✓'; };
+  }, 100);
+}
+
+function playAyahByNum(num) {
+  const ayah = currentAyahs.find(a => a.numberInSurah === num);
+  if (!ayah) return;
+  const status = document.getElementById('audio-status');
+  audio.pause(); audio.src = '';
+  audio.src = `https://cdn.islamic.network/quran/audio/128/${selectedReciterId}/${ayah.number}.mp3`;
+  audio.play().catch(() => {});
+  isPlaying = true; updatePlayUI();
+  document.querySelectorAll('.ayah-block').forEach(el => el.classList.remove('playing'));
+  document.querySelectorAll('.ayah-play-btn').forEach(el => { el.classList.remove('playing'); el.textContent = '▶ استمع'; });
+  const block = document.getElementById(`ayah-${num}`);
+  const btn = document.getElementById(`play-btn-${num}`);
+  if (block) { block.classList.add('playing'); block.scrollIntoView({behavior:'smooth',block:'center'}); }
+  if (btn) { btn.classList.add('playing'); btn.textContent = '⏸ إيقاف'; }
+  if (status) status.textContent = `▶ الآية ${num}`;
+  audio.onended = () => {
+    const nextAyah = currentAyahs.find(a => a.numberInSurah === num + 1);
+    if (nextAyah) playAyahByNum(nextAyah.numberInSurah);
+    else { isPlaying = false; updatePlayUI(); }
+  };
+}
+
+function prevAyah() { audio.currentTime = Math.max(0, audio.currentTime - 10); }
+function nextAyah() { audio.currentTime = Math.min(audio.duration, audio.currentTime + 10); }
+
+function togglePlay() {
+  if (isPlaying) { audio.pause(); isPlaying = false; }
+  else { audio.play().catch(() => {}); isPlaying = true; }
+  updatePlayUI();
+}
+
+function stopAudio() {
+  audio.pause(); audio.src = ''; isPlaying = false;
+  document.querySelectorAll('.ayah-block').forEach(el => el.classList.remove('playing'));
+  document.querySelectorAll('.ayah-play-btn').forEach(el => { el.classList.remove('playing'); el.textContent = '▶ استمع'; });
+  document.getElementById('mini-player').classList.remove('show');
+  updatePlayUI();
+}
+
+function updatePlayUI() {
+  document.getElementById('mini-play-btn').textContent = isPlaying ? '⏸' : '▶';
+  const btn = document.getElementById('main-play-btn');
+  if (btn) btn.textContent = isPlaying ? '⏸' : '▶';
+}
 
 function changeFontSize(d) {
   fontSize = Math.max(1.0, Math.min(2.2, fontSize + d));
@@ -494,7 +664,6 @@ async function toggleTranslation() {
   showTranslation = !showTranslation;
   const btn = document.getElementById('trans-btn');
   btn.classList.toggle('active', showTranslation);
-
   if (showTranslation) {
     btn.textContent = '⏳ جاري...';
     try {
@@ -505,7 +674,7 @@ async function toggleTranslation() {
         if (el) { el.textContent = a.text; el.classList.add('show'); }
       });
     } catch(e) {}
-    btn.textContent = '🌐 إخفاء التفسير';
+    btn.textContent = '🌐 إخفاء';
   } else {
     document.querySelectorAll('.ayah-translation').forEach(el => el.classList.remove('show'));
     btn.textContent = '🌐 تفسير';
@@ -516,58 +685,53 @@ function toggleBookmark(num) {
   const idx = bookmarks.findIndex(b => b.surah === num);
   if (idx >= 0) bookmarks.splice(idx, 1);
   else bookmarks.push({ surah: num, name: currentSurah.name, verses: currentSurah.verses });
-  localStorage.setItem('quran_bookmarks', JSON.stringify(bookmarks));
+  localStorage.setItem('q_bookmarks', JSON.stringify(bookmarks));
   const btn = document.getElementById('bm-btn');
   const isNow = bookmarks.find(b => b.surah === num);
   btn.className = `ctrl-btn ${isNow ? 'active' : ''}`;
-  btn.textContent = `🔖 ${isNow ? 'في المفضلة' : 'أضف للمفضلة'}`;
+  btn.textContent = `🔖 ${isNow ? 'في المفضلة' : 'أضف'}`;
 }
 
 // ── Reciters ──
 function renderReciters() {
   document.getElementById('reciters-grid').innerHTML = reciters.map(r => `
-    <div class="reciter-card ${r.id === selectedReciterId ? 'selected' : ''}" onclick="selectReciter('${r.id}')">
+    <div class="reciter-card ${r.id===selectedReciterId?'selected':''}" onclick="selectReciter('${r.id}')">
       <div class="reciter-avatar">🎙</div>
       <div class="reciter-info">
         <div class="reciter-name-ar">${r.name}</div>
         <div class="reciter-style">${r.style}</div>
       </div>
-      <div class="reciter-check">${r.id === selectedReciterId ? '✓' : ''}</div>
+      <div class="reciter-check">${r.id===selectedReciterId?'✓':''}</div>
     </div>`).join('');
 }
 
 function selectReciter(id) {
-  selectedReciterId = id;
-  localStorage.setItem('quran_reciter', id);
-  stopAudio();
-  renderReciters();
-  updateHomeReciter();
-  // Update reader if open
-  const readerName = document.querySelector('.reciter-name');
-  if (readerName) readerName.textContent = getReciter().name;
+  selectedReciterId = id; localStorage.setItem('q_reciter', id);
+  stopAudio(); renderReciters(); updateHomeReciter();
+  const rn = document.querySelector('.reciter-name');
+  if (rn) rn.textContent = getReciter().name;
+}
+
+function updateHomeReciter() {
+  const el = document.getElementById('home-reciter');
+  if (el) el.textContent = getReciter().name.split(' ')[0];
 }
 
 // ── Bookmarks ──
 function renderBookmarks() {
   const el = document.getElementById('bookmark-list');
-  if (!bookmarks.length) {
-    el.innerHTML = '<div class="empty-state"><span>🔖</span>لا توجد سور في المفضلة</div>';
-    return;
-  }
+  if (!bookmarks.length) { el.innerHTML = '<div class="empty-state"><span>🔖</span>لا توجد سور في المفضلة</div>'; return; }
   el.innerHTML = bookmarks.map(b => `
     <div class="bookmark-item" onclick="openSurah(${b.surah})">
       <div class="bm-icon">📖</div>
-      <div class="bm-info">
-        <div class="bm-name">${b.name}</div>
-        <div class="bm-sub">سورة رقم ${b.surah} • ${b.verses} آية</div>
-      </div>
+      <div class="bm-info"><div class="bm-name">${b.name}</div><div class="bm-sub">سورة ${b.surah} • ${b.verses} آية</div></div>
       <button class="bm-del" onclick="event.stopPropagation();removeBookmark(${b.surah})">✕</button>
     </div>`).join('');
 }
 
 function removeBookmark(num) {
   bookmarks = bookmarks.filter(b => b.surah !== num);
-  localStorage.setItem('quran_bookmarks', JSON.stringify(bookmarks));
+  localStorage.setItem('q_bookmarks', JSON.stringify(bookmarks));
   renderBookmarks();
 }
 
@@ -578,18 +742,17 @@ function goPage(p) {
   document.getElementById('page-' + p).classList.add('active');
   const nav = document.getElementById('nav-' + p);
   if (nav) nav.classList.add('active');
-  document.getElementById('search-wrap').style.display = p === 'home' ? 'block' : 'none';
+  const showSearch = ['home'].includes(p);
+  document.getElementById('search-wrap').style.display = showSearch ? 'block' : 'none';
   if (p === 'bookmarks') renderBookmarks();
   if (p === 'reciters') renderReciters();
+  if (p === 'mushaf') renderMushaf();
+  if (p === 'home') { renderCats(); filterSurahs(); }
 }
 
-function goBack() {
-  goPage('home');
-}
+function goBack() { goPage('home'); }
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').catch(() => {});
-}
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
 
 init();
 </script>
