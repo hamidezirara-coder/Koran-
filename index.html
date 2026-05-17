@@ -270,7 +270,19 @@ function getAudioUrl(globalAyahNum) {
 
 function getSurahAudioUrl() {
   const r = getReciter();
-  return `https://cdn.islamic.network/quran/audio-surah/128/${r.id}/${currentSurah.number}.mp3`;
+  const num = String(currentSurah.number).padStart(3, '0');
+  // QuranicAudio.com direct MP3 links - full surah files
+  const servers = {
+    'ar.alafasy':        `https://download.quranicaudio.com/quran/mishaari_raashid_al_3afaasee/${num}.mp3`,
+    'ar.husary':         `https://download.quranicaudio.com/quran/mahmood_khaleel_al-husaree/${num}.mp3`,
+    'ar.minshawi':       `https://download.quranicaudio.com/quran/mohamed_siddiq_al-minshawi/${num}.mp3`,
+    'ar.abdurrahmaanas': `https://download.quranicaudio.com/quran/abdurrahmaan_as-sudais/${num}.mp3`,
+    'ar.shaatree':       `https://download.quranicaudio.com/quran/abu_bakr_ash-shaatree/${num}.mp3`,
+    'ar.mahermuaiqly':   `https://download.quranicaudio.com/quran/maher_al_muaiqly/${num}.mp3`,
+    'ar.abdullahbasfar': `https://download.quranicaudio.com/quran/abdullah_basfar/${num}.mp3`,
+    'ar.aymanswoaid':    `https://download.quranicaudio.com/quran/ayman_sowaid/${num}.mp3`,
+  };
+  return servers[r.id] || servers['ar.alafasy'];
 }
 
 function playSurahFromStart() {
