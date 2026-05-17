@@ -380,36 +380,66 @@ function resetKhatma() {
 // ── Prayer Times ──
 async function loadPrayerTimes() {
   try {
-    const pos = await new Promise((res, rej) => navigator.geolocation.getCurrentPosition(res, rej, {timeout:5000}));
+    const pos = await new Promise((res, rej) =>
+      navigator.geolocation.getCurrentPosition(res, rej, {timeout:8000})
+    );
     const {latitude: lat, longitude: lng} = pos.coords;
     const res = await fetch(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=4`);
     const data = await res.json();
     const t = data.data.timings;
-    const city = data.data.meta.timezone.split('/')[1]?.replace('_',' ') || 'موقعك';
+    const city = data.data.meta.timezone.split('/')[1]?.replace(/_/g,' ') || 'موقعك';
     document.getElementById('prayer-city').textContent = city;
-    const prayers = [
-      {name:'الفجر', time:t.Fajr},
-      {name:'الظهر', time:t.Dhuhr},
-      {name:'العصر', time:t.Asr},
-      {name:'المغرب', time:t.Maghrib},
-      {name:'العشاء', time:t.Isha},
-    ];
-    const now = new Date();
-    const nowMins = now.getHours()*60 + now.getMinutes();
-    let nextIdx = prayers.findIndex(p => {
-      const [h,m] = p.time.split(':').map(Number);
-      return h*60+m > nowMins;
-    });
-    if (nextIdx === -1) nextIdx = 0;
-    document.getElementById('prayer-grid').innerHTML = prayers.map((p,i) => `
-      <div class="prayer-item ${i===nextIdx?'next':''}">
-        <div class="prayer-name">${p.name}</div>
-        <div class="prayer-time">${p.time}</div>
-      </div>`).join('');
+    showPrayerTimes(t);
   } catch(e) {
-    document.getElementById('prayer-grid').innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--muted);font-size:0.75rem;padding:8px">تعذّر تحديد الموقع</div>';
+    // fallback: ask for city
     document.getElementById('prayer-city').textContent = '';
+    document.getElementById('prayer-grid').innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:8px">
+        <input id="city-input" type="text" placeholder="اكتب مدينتك بالإنجليزية..." 
+          style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--text);font-family:'Cairo',sans-serif;font-size:0.82rem;outline:none;margin-bottom:8px"/>
+        <button onclick="loadPrayerByCity()" 
+          style="width:100%;background:var(--gold);border:none;border-radius:8px;padding:8px;color:#0a1628;font-family:'Cairo',sans-serif;font-weight:700;font-size:0.82rem;cursor:pointer">
+          عرض المواقيت
+        </button>
+      </div>`;
   }
+}
+
+async function loadPrayerByCity() {
+  const city = document.getElementById('city-input')?.value?.trim();
+  if (!city) return;
+  document.getElementById('prayer-grid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:8px;color:var(--muted)">⏳ جاري التحميل...</div>';
+  try {
+    const res = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${encodeURIComponent(city)}&country=&method=4`);
+    const data = await res.json();
+    if (data.code !== 200) throw new Error();
+    document.getElementById('prayer-city').textContent = city;
+    showPrayerTimes(data.data.timings);
+  } catch(e) {
+    document.getElementById('prayer-grid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:8px;color:#e74c3c;font-size:0.75rem">تعذّر التحميل، جرّب اسماً آخر</div>';
+  }
+}
+
+function showPrayerTimes(t) {
+  const prayers = [
+    {name:'الفجر',   time: t.Fajr},
+    {name:'الظهر',   time: t.Dhuhr},
+    {name:'العصر',   time: t.Asr},
+    {name:'المغرب',  time: t.Maghrib},
+    {name:'العشاء',  time: t.Isha},
+  ];
+  const now = new Date();
+  const nowMins = now.getHours()*60 + now.getMinutes();
+  let nextIdx = prayers.findIndex(p => {
+    const [h,m] = p.time.split(':').map(Number);
+    return h*60+m > nowMins;
+  });
+  if (nextIdx === -1) nextIdx = 0;
+  document.getElementById('prayer-grid').innerHTML = prayers.map((p,i) => `
+    <div class="prayer-item ${i===nextIdx?'next':''}">
+      <div class="prayer-name">${p.name}</div>
+      <div class="prayer-time">${p.time}</div>
+    </div>`).join('');
 }
 
 // ── Mushaf ──
@@ -417,10 +447,36 @@ function renderMushaf() {
   document.getElementById('mushaf-page-num').textContent = mushafPage;
   const num = String(mushafPage).padStart(3, '0');
   document.getElementById('mushaf-content').innerHTML = `
-    <img class="mushaf-img" src="https://www.searchtruth.com/quran/images2/${num}.jpg"
-      onerror="this.src='https://quran.com/images/pages/${num}.png'"
-      onload="this.style.opacity=1" style="opacity:0;transition:opacity 0.3s"
+    <div style="text-align:center;color:var(--muted);font-size:0.75rem;margin-bottom:8px">صفحة ${mushafPage} من ٦٠٤</div>
+    <img class="mushaf-img"
+      src="https://static.qurancdn.com/images/pages/page${num}.png"
+      onerror="tryNextMushafSrc(this, ${mushafPage})"
+      onload="this.style.opacity=1"
+      style="opacity:0;transition:opacity 0.4s;background:var(--card)"
       alt="صفحة ${mushafPage}"/>`;
+}
+
+function tryNextMushafSrc(img, page) {
+  const num = String(page).padStart(3, '0');
+  const sources = [
+    `https://www.islamicfinder.org/quran/images/${num}.jpg`,
+    `https://qurancomplex.gov.sa/wp-content/uploads/2021/quran/hafs/${num}.jpg`,
+  ];
+  const tried = parseInt(img.dataset.tried || '0');
+  if (tried < sources.length) {
+    img.dataset.tried = tried + 1;
+    img.src = sources[tried];
+  } else {
+    img.parentElement.innerHTML = `
+      <div style="text-align:center;padding:40px;color:var(--muted)">
+        <div style="font-size:2rem;margin-bottom:10px">📖</div>
+        <div style="font-size:0.85rem;margin-bottom:12px">تعذّر تحميل الصورة</div>
+        <a href="https://quran.com/al-fatihah?mushaf=true" target="_blank"
+          style="background:var(--gold);color:#0a1628;padding:10px 20px;border-radius:10px;text-decoration:none;font-weight:700;font-size:0.85rem">
+          افتح المصحف على quran.com
+        </a>
+      </div>`;
+  }
 }
 
 function mushafNext() {
