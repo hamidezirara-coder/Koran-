@@ -445,18 +445,26 @@ async function loadQuranData() {
   } catch(e) {}
 }
 
+// Remove tashkeel for search
+function removeTashkeel(text) {
+  return text.replace(/[\u0610-\u061A\u064B-\u065F\u0670]/g, '');
+}
+
 function searchQuran() {
-  const q = document.getElementById('quran-search-input').value.trim();
+  const q = removeTashkeel(document.getElementById('quran-search-input').value.trim());
   const container = document.getElementById('search-results-container');
   if (!q || q.length < 2) { container.innerHTML = '<div class="empty-state"><span>🔍</span>اكتب كلمة للبحث</div>'; return; }
   if (!quranData) { container.innerHTML = '<div class="empty-state"><span>⏳</span>جاري تحميل البيانات...</div>'; return; }
 
   const results = [];
   quranData.forEach(s => {
-    s.ayahs.forEach(a => {
-      if (a.text.includes(q)) results.push({ surahNum: s.number, surahName: s.englishName, surahNameAr: surahNames[s.number-1], ayahNum: a.numberInSurah, text: a.text });
-    });
     if (results.length >= 30) return;
+    s.ayahs.forEach(a => {
+      if (results.length >= 30) return;
+      if (removeTashkeel(a.text).includes(q)) {
+        results.push({ surahNum: s.number, surahNameAr: surahNames[s.number-1], ayahNum: a.numberInSurah, text: a.text });
+      }
+    });
   });
 
   if (!results.length) { container.innerHTML = '<div class="empty-state"><span>🔍</span>لا توجد نتائج</div>'; return; }
@@ -465,7 +473,7 @@ function searchQuran() {
     results.map(r => `
       <div class="search-result-item" onclick="openSurahAtAyah(${r.surahNum}, ${r.ayahNum})">
         <div class="result-surah">${r.surahNameAr} — الآية ${r.ayahNum}</div>
-        <div class="result-text">${r.text.replace(q, `<span class="result-highlight">${q}</span>`)}</div>
+        <div class="result-text">${r.text}</div>
       </div>`).join('');
 }
 
