@@ -202,14 +202,14 @@ header{background:linear-gradient(180deg,#0f2040 0%,transparent 100%);padding:16
 <script>
 // ── Reciters ──
 const reciters = [
-  { id: 'ar.alafasy',        name: 'مشاري العفاسي',      style: 'مرتّل', surahServer: 'https://server8.mp3quran.net/afs/' },
-  { id: 'ar.husary',         name: 'محمود خليل الحصري',  style: 'مرتّل', surahServer: 'https://server13.mp3quran.net/husr/' },
-  { id: 'ar.minshawi',       name: 'محمد صديق المنشاوي', style: 'مجوّد', surahServer: 'https://server10.mp3quran.net/minsh/' },
-  { id: 'ar.abdurrahmaanas', name: 'عبد الرحمن السديس',  style: 'مرتّل', surahServer: 'https://server11.mp3quran.net/sds/' },
-  { id: 'ar.shaatree',       name: 'أبو بكر الشاطري',   style: 'مرتّل', surahServer: 'https://server7.mp3quran.net/shur/' },
-  { id: 'ar.mahermuaiqly',   name: 'ماهر المعيقلي',      style: 'مرتّل', surahServer: 'https://server12.mp3quran.net/maher/' },
-  { id: 'ar.abdullahbasfar', name: 'عبدالله بصفر',       style: 'مرتّل', surahServer: 'https://server14.mp3quran.net/basfr/' },
-  { id: 'ar.aymanswoaid',    name: 'ناصر القطامي',       style: 'مرتّل', surahServer: 'https://server6.mp3quran.net/qtm/' },
+  { id: 'ar.alafasy',        name: 'مشاري العفاسي',      style: 'مرتّل' },
+  { id: 'ar.husary',         name: 'محمود خليل الحصري',  style: 'مرتّل' },
+  { id: 'ar.minshawi',       name: 'محمد صديق المنشاوي', style: 'مجوّد' },
+  { id: 'ar.abdurrahmaanas', name: 'عبد الرحمن السديس',  style: 'مرتّل' },
+  { id: 'ar.shaatree',       name: 'أبو بكر الشاطري',   style: 'مرتّل' },
+  { id: 'ar.mahermuaiqly',   name: 'ماهر المعيقلي',      style: 'مرتّل' },
+  { id: 'ar.abdullahbasfar', name: 'عبدالله بصفر',       style: 'مرتّل' },
+  { id: 'ar.aymanswoaid',    name: 'أيمن سويد',          style: 'مجوّد' },
 ];
 
 const surahNames=['الفاتحة','البقرة','آل عمران','النساء','المائدة','الأنعام','الأعراف','الأنفال','التوبة','يونس','هود','يوسف','الرعد','إبراهيم','الحجر','النحل','الإسراء','الكهف','مريم','طه','الأنبياء','الحج','المؤمنون','النور','الفرقان','الشعراء','النمل','القصص','العنكبوت','الروم','لقمان','السجدة','الأحزاب','سبأ','فاطر','يس','الصافات','ص','الزمر','غافر','فصلت','الشورى','الزخرف','الدخان','الجاثية','الأحقاف','محمد','الفتح','الحجرات','ق','الذاريات','الطور','النجم','القمر','الرحمن','الواقعة','الحديد','المجادلة','الحشر','الممتحنة','الصف','الجمعة','المنافقون','التغابن','الطلاق','التحريم','الملك','القلم','الحاقة','المعارج','نوح','الجن','المزمل','المدثر','القيامة','الإنسان','المرسلات','النبأ','النازعات','عبس','التكوير','الانفطار','المطففين','الانشقاق','البروج','الطارق','الأعلى','الغاشية','الفجر','البلد','الشمس','الليل','الضحى','الشرح','التين','العلق','القدر','البينة','الزلزلة','العاديات','القارعة','التكاثر','العصر','الهمزة','الفيل','قريش','الماعون','الكوثر','الكافرون','النصر','المسد','الإخلاص','الفلق','الناس'];
@@ -270,8 +270,7 @@ function getAudioUrl(globalAyahNum) {
 
 function getSurahAudioUrl() {
   const r = getReciter();
-  const num = String(currentSurah.number).padStart(3, '0');
-  return `${r.surahServer}${num}.mp3`;
+  return `https://cdn.islamic.network/quran/audio-surah/128/${r.id}/${currentSurah.number}.mp3`;
 }
 
 function playSurahFromStart() {
