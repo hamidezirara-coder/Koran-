@@ -287,27 +287,41 @@ function getSurahAudioUrl() {
 
 function playSurahFromStart() {
   if (!currentSurah) return;
-  // Play full surah as one continuous file
   const url = getSurahAudioUrl();
-  audio.src = url;
-  audio.play().then(() => {
-    isPlaying = true;
-    updatePlayUI();
-    document.getElementById('mini-surah-name').textContent = currentSurah.name;
-    document.getElementById('mini-ayah-info').textContent = `${getReciter().name} — السورة كاملة`;
-    document.getElementById('mini-player').classList.add('show');
-    const prog = document.getElementById('ayah-progress');
-    if (prog) prog.textContent = `▶ يتم تشغيل السورة كاملة...`;
-  }).catch(() => {
-    // fallback to ayah by ayah
-    playAyah(0);
-  });
-  audio.onended = () => {
-    isPlaying = false;
-    updatePlayUI();
-    const prog = document.getElementById('ayah-progress');
-    if (prog) prog.textContent = 'انتهت السورة ✓';
-  };
+  // Show loading
+  const prog = document.getElementById('ayah-progress');
+  if (prog) prog.textContent = '⏳ جاري التحميل...';
+  
+  audio.pause();
+  audio.src = '';
+  
+  setTimeout(() => {
+    audio.src = url;
+    audio.load();
+    
+    audio.oncanplay = () => {
+      audio.play().then(() => {
+        isPlaying = true;
+        updatePlayUI();
+        document.getElementById('mini-surah-name').textContent = currentSurah.name;
+        document.getElementById('mini-ayah-info').textContent = `${getReciter().name} — السورة كاملة`;
+        document.getElementById('mini-player').classList.add('show');
+        if (prog) prog.textContent = `▶ ${currentSurah.name} — ${getReciter().name}`;
+      }).catch(err => {
+        if (prog) prog.textContent = '❌ تعذّر التشغيل - جرّب آية بآية';
+      });
+    };
+    
+    audio.onerror = () => {
+      if (prog) prog.textContent = '❌ الرابط لا يعمل - جرّب قارئاً آخر';
+    };
+    
+    audio.onended = () => {
+      isPlaying = false;
+      updatePlayUI();
+      if (prog) prog.textContent = 'انتهت السورة ✓';
+    };
+  }, 100);
 }
 
 function playAyah(index) {
